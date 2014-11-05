@@ -2,19 +2,19 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/debug/classes-023a062c6d5def2168f89a77c6dda74b682a4338.jar"
+        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/release/classes-023a062c6d5def2168f89a77c6dda74b682a4338.jar"
         jar="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0/classes.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="686344a780033e4ba22b926cd225f8d4941247e6"/>
     <item
-        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.0-dfb452d7380aaf83ae360d516df8b84b64ec912f.jar"
+        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/release/internal_impl-21.0.0-dfb452d7380aaf83ae360d516df8b84b64ec912f.jar"
         jar="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0/libs/internal_impl-21.0.0.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="1609e6d42d0480b0f4188e2c29f75388fa12a8f0"/>
     <item
-        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.0-b6ac6f0193079fecaf991debe6af42be384c97e9.jar"
+        dex="/Users/Sergi/Documents/AndroidStudioProjects/Entrenadorplanificaelpartido/app/build/intermediates/pre-dexed/release/support-annotations-21.0.0-b6ac6f0193079fecaf991debe6af42be384c97e9.jar"
         jar="/Users/Sergi/Documents/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/21.0.0/support-annotations-21.0.0.jar"
         jumboMode="false"
         revision="20.0.0"

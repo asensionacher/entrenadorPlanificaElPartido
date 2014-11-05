@@ -63,7 +63,6 @@ public class MainActivity extends Activity {
                 et.setMinLines(1);
                 et.setMaxLines(1);
                 et.setHint("Nombre del jugador");
-                et.setText(indice.toString() + " player");
                 ll.addView(et);
                 indice++;
             }
