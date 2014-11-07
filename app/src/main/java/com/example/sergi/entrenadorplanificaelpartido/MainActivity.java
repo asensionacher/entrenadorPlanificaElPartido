@@ -65,6 +65,16 @@ public class MainActivity extends Activity {
 
             case R.id.editar_titulares:
                 if (nombres.size()>6) {
+                    SharedPreferences prefs = getSharedPreferences("PartidoActual",
+                            Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.clear();
+                    for (Integer i = 0; i < nombres.size(); i++) {
+                        editor.putString("jugador" + i.toString(),
+                                nombres.get(i).getSelectedItem().toString());
+                    }
+                    editor.putInt("jugadores", nombres.size());
+                    editor.commit();
                     Intent intent1 =
                             new Intent(MainActivity.this, Titulares.class);
                     //Iniciamos la nueva actividad
@@ -89,9 +99,12 @@ public class MainActivity extends Activity {
 
         SharedPreferences prefs =
                 getSharedPreferences("Jugadores",Context.MODE_PRIVATE);
+
         List<String> list = new ArrayList<String>();
         for (Integer i = 0; i < prefs.getInt("jugadores", 0); i++) {
-            list.add(prefs.getString("jugador" + i.toString(), "error"));
+            if (!prefs.getString("jugador" + i.toString(), "error").equals("")) {
+                list.add(prefs.getString("jugador" + i.toString(), "error"));
+            }
         }
         list.add("VACÍO");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,

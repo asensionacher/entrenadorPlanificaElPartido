@@ -91,7 +91,8 @@
         android:text="Small Text"
         android:id="@+id/tv_delantero"
         android:textSize="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/tv_medio_izquierdo"
+        android:layout_alignLeft="@+id/tv_central"
+        android:layout_alignStart="@+id/tv_central" />
 
 </RelativeLayout>

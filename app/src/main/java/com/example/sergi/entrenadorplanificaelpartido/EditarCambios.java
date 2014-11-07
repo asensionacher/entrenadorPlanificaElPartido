@@ -89,7 +89,6 @@ public class EditarCambios extends Activity {
                 for (int i = 0; i < 7; i++) {
                     for (int j = i+1; j < 7; j++) {
                         if (aux.get(i).equals(aux.get(j))) {
-                            seguir = false;
                             Toast toast1 =
                                     Toast.makeText(getApplicationContext(),
                                             "No pueden haber dos jugadores iguales",
@@ -122,7 +121,7 @@ public class EditarCambios extends Activity {
                                 new Intent(EditarCambios.this, Partido.class);
                         startActivity(intent);
                     }
-                    setTitle(prefs.getString(indice.toString(), "error"));
+                    setTitle("Cambios en el minuto " + prefs.getString(indice.toString(), "Final"));
                 }
                 return true;
 
@@ -136,7 +135,7 @@ public class EditarCambios extends Activity {
         SharedPreferences prefs =
                 getSharedPreferences(minuto, Context.MODE_PRIVATE);
         SharedPreferences prefsJugadores =
-                getSharedPreferences("Jugadores",Context.MODE_PRIVATE);
+                getSharedPreferences("PartidoActual",Context.MODE_PRIVATE);
         SharedPreferences prefsTitulares =
                 getSharedPreferences("Titulares",Context.MODE_PRIVATE);
 

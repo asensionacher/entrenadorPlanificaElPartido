@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sergi.entrenadorplanificaelpartido" >
+    <uses-permission android:name="android.permission.VIBRATE" />
+
 
     <application
         android:allowBackup="true"
@@ -9,7 +11,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,23 +21,28 @@
         </activity>
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.EditarCambios"
-            android:label="@string/title_activity_editar_cambios" >
+            android:label="@string/title_activity_editar_cambios"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.Partido"
-            android:label="@string/title_activity_partido" >
+            android:label="@string/title_activity_partido"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.CrearEquipo"
-            android:label="@string/title_activity_crear_equipo" >
+            android:label="@string/title_activity_crear_equipo"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.Titulares"
-            android:label="@string/title_activity_titulares" >
+            android:label="@string/title_activity_titulares"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.sergi.entrenadorplanificaelpartido.EditarMinutosCambios"
-            android:label="@string/title_activity_editar_minutos_cambios" >
+            android:label="@string/title_activity_editar_minutos_cambios"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

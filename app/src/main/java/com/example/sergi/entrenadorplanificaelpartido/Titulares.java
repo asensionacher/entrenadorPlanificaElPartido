@@ -114,7 +114,7 @@ public class Titulares extends Activity {
     void addNamesOnSpinner(Spinner spinner) {
 
         SharedPreferences prefs =
-                getSharedPreferences("Jugadores", Context.MODE_PRIVATE);
+                getSharedPreferences("PartidoActual", Context.MODE_PRIVATE);
         List<String> list = new ArrayList<String>();
         for (Integer i = 0; i < prefs.getInt("jugadores", 0); i++) {
             list.add(prefs.getString("jugador" + i.toString(), "error"));
@@ -125,4 +125,12 @@ public class Titulares extends Activity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent =
+                new Intent(Titulares.this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }

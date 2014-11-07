@@ -108,15 +108,17 @@ public class CrearEquipo extends Activity {
                 getSharedPreferences("Jugadores",Context.MODE_PRIVATE);
 
         for(Integer i = 0; i < prefs.getInt("jugadores", 0); i++) {
-            EditText et = new EditText(context);
-            nombres.add(et);
-            String s = prefs.getString("jugador" + i.toString(), "error");
-            et.setText(s);
-            et.setMinLines(1);
-            et.setMaxLines(1);
-            et.setHint("Nombre del jugador");
-            ll.addView(et);
-            indice++;
+            if (!prefs.getString("jugador" + i.toString(), "error").equals("")) {
+                EditText et = new EditText(context);
+                nombres.add(et);
+                String s = prefs.getString("jugador" + i.toString(), "error");
+                et.setText(s);
+                et.setMinLines(1);
+                et.setMaxLines(1);
+                et.setHint("Nombre del jugador");
+                ll.addView(et);
+                indice++;
+            }
         }
     }
 }

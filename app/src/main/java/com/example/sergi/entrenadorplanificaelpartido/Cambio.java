@@ -9,21 +9,45 @@ public class Cambio {
     public String minuto;
     public Boolean avisado;
     public Boolean escrito;
+    public String pos;
+    public Boolean notificado;
 
-    public Cambio(String Entra, String Sale, String Minuto) {
+    public Cambio(String Entra, String Sale, String Minuto, String Pos) {
         minuto = Minuto;
         sale = Sale;
         entra = Entra;
+        pos = Pos;
         avisado = false;
         escrito = false;
+        notificado = false;
     }
 
     public Cambio (Cambio c) {
         minuto = c.getMinuto();
         sale = c.getSale();
         entra = c.getEntra();
+        pos = c.getPos();
         avisado = false;
         escrito = false;
+        notificado = false;
+    }
+
+    public void setNotificado(Boolean notificado) {
+        this.notificado = notificado;
+    }
+
+    public Boolean getNotificado() {
+
+        return notificado;
+    }
+
+    public void setPos(String pos) {
+        this.pos = pos;
+    }
+
+    public String getPos() {
+
+        return pos;
     }
 
     public Boolean getAvisado() {
