@@ -3,91 +3,37 @@ package com.example.sergi.entrenadorplanificaelpartido;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
 
-    Button anadir_jugador;
-    Button editar_cambios;
     LinearLayout ll;
-    ArrayList<String> nombres;
+    ArrayList<Spinner> nombres = new ArrayList<Spinner>();
     Context context;
-    Integer indice = 0;
+    TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        nombres = new ArrayList();
 
-        anadir_jugador = (Button)findViewById(R.id.button_anadir_jugador);
         ll = (LinearLayout)findViewById(R.id.linear_layout_main);
-        editar_cambios = (Button)findViewById(R.id.button_elegir_titulares);
-
-        anadir_jugador.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                EditText et = new EditText(context);
-                final int aux = indice;
-                et.setId(indice);
-                nombres.add(indice, null);
-                et.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        nombres.set(aux, s.toString());
-                    }
-                });
-                et.setMinLines(1);
-                et.setMaxLines(1);
-                et.setHint("Nombre del jugador");
-                ll.addView(et);
-                indice++;
-            }
-        });
-
-        editar_cambios.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (nombres.size()>6) {
-                    Intent intent =
-                            new Intent(MainActivity.this, EditarCambios.class);
-                    Bundle b = new Bundle();
-                    b.putInt("numero", nombres.size());
-                    for (Integer i = 0; i < nombres.size(); i++) {
-                        b.putString(i.toString(), nombres.get(i));
-                        Log.d("Numero" + i.toString(), nombres.get(i));
-                    }
-                    intent.putExtras(b);
-
-                    //Iniciamos la nueva actividad
-                    startActivity(intent);
-                }
-            }
-        });
+        Spinner spinner = new Spinner(context);
+        addNamesOnSpinner(spinner);
+        nombres.add(spinner);
+        ll.addView(spinner);
     }
 
     @Override
@@ -102,6 +48,61 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case R.id.action_crear_equipo:
+                Intent intent =
+                        new Intent(MainActivity.this, CrearEquipo.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.nuevo_jugador:
+                Spinner spinner = new Spinner(context);
+                addNamesOnSpinner(spinner);
+                nombres.add(spinner);
+                ll.addView(spinner);
+                return true;
+
+            case R.id.editar_titulares:
+                if (nombres.size()>6) {
+                    Intent intent1 =
+                            new Intent(MainActivity.this, Titulares.class);
+                    //Iniciamos la nueva actividad
+                    startActivity(intent1);
+                }
+
+                else {
+                    Toast toast1 =
+                            Toast.makeText(getApplicationContext(),
+                                    "Tienen que haber mínimo 7 jugadores!", Toast.LENGTH_SHORT);
+
+                    toast1.show();
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void addNamesOnSpinner(Spinner spinner) {
+
+        SharedPreferences prefs =
+                getSharedPreferences("Jugadores",Context.MODE_PRIVATE);
+        List<String> list = new ArrayList<String>();
+        for (Integer i = 0; i < prefs.getInt("jugadores", 0); i++) {
+            list.add(prefs.getString("jugador" + i.toString(), "error"));
+        }
+        list.add("VACÍO");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+
     }
 }

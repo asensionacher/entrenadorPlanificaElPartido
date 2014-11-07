@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.sergi.entrenadorplanificaelpartido.CrearEquipo">
+    <item
+        android:id="@+id/guardar_equipo"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Guardar equipo"/>
+
+    <item
+        android:id="@+id/nuevo_jugador_equipo"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Añadir Jugador"/>
+</menu>

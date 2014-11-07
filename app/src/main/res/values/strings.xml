@@ -7,5 +7,7 @@
     <string name="title_activity_editar_cambios">EditarCambios</string>
     <string name="title_activity_partido">Partido</string>
     <string name="title_activity_titulares">titulares</string>
+    <string name="title_activity_crear_equipo">CrearEquipo</string>
+    <string name="title_activity_editar_minutos_cambios">EditarMinutosCambios</string>
 
 </resources>

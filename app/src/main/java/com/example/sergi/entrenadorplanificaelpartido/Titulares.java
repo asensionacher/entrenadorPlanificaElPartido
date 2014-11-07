@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -15,43 +16,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EditarCambios extends Activity {
-    Context context = this;
-    Integer minutos;
-    Integer indice = 0;
-    Spinner s1, s2, s3, s4, s5, s6, s7;
+public class Titulares extends Activity {
+
+    Spinner s1,s2,s3,s4,s5,s6,s7;
+    Button cambios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_cambios);
+        setContentView(R.layout.activity_titulares);
 
-        s1 = (Spinner)findViewById(R.id.spinner_portero_cambio);
-        s2 = (Spinner)findViewById(R.id.spinner_lateral_izquierdo_cambio);
-        s3 = (Spinner)findViewById(R.id.spinner_central_cambio);
-        s4 = (Spinner)findViewById(R.id.spinner_lateral_derecho_cambio);
-        s5 = (Spinner)findViewById(R.id.spinner_medio_izquierdo_cambio);
-        s6 = (Spinner)findViewById(R.id.spinner_medio_derecho_cambio);
-        s7 = (Spinner)findViewById(R.id.spinner_delantero_Cambio);
+        s1 = (Spinner)findViewById(R.id.spinner_portero);
+        s2 = (Spinner)findViewById(R.id.spinner_lateral_izquierdo);
+        s3 = (Spinner)findViewById(R.id.spinner_central);
+        s4 = (Spinner)findViewById(R.id.spinner_lateral_derecho);
+        s5 = (Spinner)findViewById(R.id.spinner_medio_izquierdo);
+        s6 = (Spinner)findViewById(R.id.spinner_medio_derecho);
+        s7 = (Spinner)findViewById(R.id.spinner_delantero);
 
-        SharedPreferences prefs =
-                getSharedPreferences("Minutos", Context.MODE_PRIVATE);
-        minutos = prefs.getInt("minutos", 0);
-        if (minutos == 0) {
-            Intent intent =
-                    new Intent(EditarCambios.this, Partido.class);
-            startActivity(intent);
-        }
+        addNamesOnSpinner(s1);
+        addNamesOnSpinner(s2);
+        addNamesOnSpinner(s3);
+        addNamesOnSpinner(s4);
+        addNamesOnSpinner(s5);
+        addNamesOnSpinner(s6);
+        addNamesOnSpinner(s7);
 
-        setTitle("Cambios en el minuto " + prefs.getString("0","error"));
 
-        setValueToSpinner(s1, "por", "Titulares");
-        setValueToSpinner(s2, "dizq", "Titulares");
-        setValueToSpinner(s3, "dcen", "Titulares");
-        setValueToSpinner(s4, "dder", "Titulares");
-        setValueToSpinner(s5, "mizq", "Titulares");
-        setValueToSpinner(s6, "mder", "Titulares");
-        setValueToSpinner(s7, "del", "Titulares");
 
     }
 
@@ -59,7 +50,7 @@ public class EditarCambios extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.editar_cambios, menu);
+        getMenuInflater().inflate(R.menu.menu_titulares, menu);
         return true;
     }
 
@@ -69,13 +60,8 @@ public class EditarCambios extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id) {
-            case R.id.guardar_cambios:
-                SharedPreferences prefs =
-                        getSharedPreferences("Minutos", Context.MODE_PRIVATE);
-                String saux = prefs.getString(indice.toString(), "error");
-
-
+        switch(id){
+            case R.id.ir_editar_minuto:
                 Boolean seguir = true;
                 ArrayList<String> aux = new ArrayList<String>();
                 aux.add(s1.getSelectedItem().toString());
@@ -102,10 +88,9 @@ public class EditarCambios extends Activity {
                 }
 
                 if (seguir) {
-                    SharedPreferences prefsMinuto = getSharedPreferences(saux,
-                            Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefsMinuto.edit();
-
+                    SharedPreferences prefs =
+                            getSharedPreferences("Titulares", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
                     editor.clear();
                     editor.putString("por", s1.getSelectedItem().toString());
                     editor.putString("dizq", s2.getSelectedItem().toString());
@@ -116,41 +101,25 @@ public class EditarCambios extends Activity {
                     editor.putString("del", s7.getSelectedItem().toString());
                     editor.commit();
 
-                    indice++;
-                    if (indice == minutos) {
-                        Intent intent =
-                                new Intent(EditarCambios.this, Partido.class);
-                        startActivity(intent);
-                    }
-                    setTitle(prefs.getString(indice.toString(), "error"));
+                    Intent intent =
+                            new Intent(Titulares.this, EditarMinutosCambios.class);
+                    startActivity(intent);
                 }
                 return true;
-
-
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    void setValueToSpinner(Spinner spinner, String pos, String minuto) {
+    void addNamesOnSpinner(Spinner spinner) {
 
         SharedPreferences prefs =
-                getSharedPreferences(minuto, Context.MODE_PRIVATE);
-        SharedPreferences prefsJugadores =
-                getSharedPreferences("Jugadores",Context.MODE_PRIVATE);
-        SharedPreferences prefsTitulares =
-                getSharedPreferences("Titulares",Context.MODE_PRIVATE);
-
-
+                getSharedPreferences("Jugadores", Context.MODE_PRIVATE);
         List<String> list = new ArrayList<String>();
-
-        String auxPos = prefsTitulares.getString(pos, "error");
-        list.add(auxPos);
-        for (Integer i = 0; i < prefsJugadores.getInt("jugadores", 0); i++) {
-            String aux = prefsJugadores.getString("jugador" + i.toString(), "error");
-            if (!aux.equals(auxPos)) {
-                list.add(aux);
-            }
+        for (Integer i = 0; i < prefs.getInt("jugadores", 0); i++) {
+            list.add(prefs.getString("jugador" + i.toString(), "error"));
         }
+        list.add("VACÍO");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

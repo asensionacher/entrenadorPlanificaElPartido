@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.sergi.entrenadorplanificaelpartido.EditarMinutosCambios">
+    <item
+        android:id="@+id/anadir_minuto"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Añadir minuto"/>
+
+    <item
+        android:id="@+id/editar_cambios"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_media_next"
+        android:title="Ir a editar cambios"/>
+</menu>

@@ -1,52 +1,50 @@
 package com.example.sergi.entrenadorplanificaelpartido;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 
 public class Partido extends Activity {
+    // TODO: VACIAR SHARED PREFERENCES AL FINAL! OnbackPressed preguntar si quieres acabar
+    // TODO: Y llevar a mainactivity
 
     Chronometer myChronometer;
-    Button button;
     Boolean start = true;
     private long lastPause;
     Boolean first = true;
-    TextView tv, tvt;
     Boolean primeraParte = true;
     Boolean fin = false;
-    ArrayList<Cambio> arrayCambios = new ArrayList<Cambio>();
-    ArrayList<String> arrayTitulares = new ArrayList<String>();
-
-
+    TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7;
+    ArrayList<Integer> minutos = new ArrayList<Integer>();
+    Drawable background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partido);
         myChronometer = (Chronometer)findViewById(R.id.chronometer_partido);
-        button = (Button)findViewById(R.id.button_start_finish_match);
-        tv = (TextView)findViewById(R.id.textView_changes);
-        tvt = (TextView)findViewById(R.id.textView_campo);
+        tv1 = (TextView)findViewById(R.id.tv_portero);
+        tv2 = (TextView)findViewById(R.id.tv_lateral_izquierdo);
+        tv3 = (TextView)findViewById(R.id.tv_central);
+        tv4 = (TextView)findViewById(R.id.tv_lateral_derecho);
+        tv5 = (TextView)findViewById(R.id.tv_medio_izquierdo);
+        tv6 = (TextView)findViewById(R.id.tv_medio_derecho);
+        tv7 = (TextView)findViewById(R.id.tv_delantero);
+        background = tv1.getBackground();
 
-        Bundle bundle = this.getIntent().getExtras();
-        getChanges(bundle);
-        initializeButton();
-        initializeTitulares(bundle);
         initializeChronometer();
+        minuto();
+        titulares();
     }
 
     @Override
@@ -61,72 +59,8 @@ public class Partido extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    void initializeChronometer() {
-        myChronometer.setOnChronometerTickListener(
-                new Chronometer.OnChronometerTickListener() {
-
-                    @Override
-                    public void onChronometerTick(Chronometer chronometer) {
-                        // TODO Auto-generated method stub
-                        long milliseconds = SystemClock.elapsedRealtime() - myChronometer.getBase();
-                        Integer seconds = (int) (milliseconds / 1000) % 60;
-                        Integer minutes = (int) ((milliseconds / (1000 * 60)) % 60);
-                        if (minutes == 25 && primeraParte) {
-                            primeraParte = false;
-                            button.setText("Empezar segunda parte");
-                            lastPause = SystemClock.elapsedRealtime();
-                            myChronometer.stop();
-                            start = true;
-
-                        }
-                        if (minutes == 50) {
-                            myChronometer.stop();
-                            button.setText("Fin del partido");
-                            fin = true;
-                        }
-
-                        for (Integer i = 0; i < arrayCambios.size(); i++) {
-                            Integer minutesCinco = minutes + 5;
-
-                            if (arrayCambios.get(i).getMinuto().equals(minutesCinco.toString())
-                                    && !arrayCambios.get(i).getAvisado()) {
-                                Log.d("Aviso", "5Minutos");
-                                Log.d("Avisado", arrayCambios.get(i).getAvisado().toString());
-
-                                tv.setText(tv.getText() + "\n-Dentro de cinco minutos: " +
-                                        arrayCambios.get(i).getEntra() + " entra por " +
-                                        arrayCambios.get(i).getSale() +
-                                        " en el minuto " + arrayCambios.get(i).getMinuto().toString());
-                                arrayCambios.get(i).setAvisado(true);
-                                Log.d("Avisadoo", arrayCambios.get(i).getAvisado().toString());
-                            }
-
-                            if (arrayCambios.get(i).getMinuto().equals(minutes.toString())
-                                    && !arrayCambios.get(i).getEscrito()) {
-                                Log.d("introducir", "ENTRO");
-
-                                tv.setText(tv.getText() +
-                                        "\n-" + arrayCambios.get(i).getEntra() + " entra por " +
-                                        arrayCambios.get(i).getSale()
-                                        + " en el minuto " + arrayCambios.get(i).getMinuto().toString());
-                                arrayCambios.get(i).setEscrito(true);
-                                cambiarTitular(arrayCambios.get(i).getEntra(),
-                                        arrayCambios.get(i).getSale());
-                            }
-                        }
-                    }
-                }
-        );
-    }
-
-    void initializeButton() {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        switch (item.getItemId()) {
+            case R.id.ini_partido:
                 if (!fin) {
                     if (start) {
                         if (first) {
@@ -139,48 +73,77 @@ public class Partido extends Activity {
                             myChronometer.start();
                         }
                         start = false;
-                        button.setText("Parar cronometro");
                     } else {
-                        button.setText("Reanudar partido");
                         lastPause = SystemClock.elapsedRealtime();
                         myChronometer.stop();
                         start = true;
                     }
                 }
-            }
-        });
+                return true;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    void getChanges(Bundle b) {
-        for (Integer i = 0; i < b.getInt("numero"); i++) {
-            Cambio cambio = new Cambio(b.getString("entra"+i.toString()),
-                    b.getString("sale"+i.toString()),
-                    b.getString("minuto"+i.toString()));
-            arrayCambios.add(cambio);
-        }
-        for (Integer i = 0; i < arrayCambios.size(); i++) {
-            Log.d("Entra " + i.toString(), arrayCambios.get(i).getEntra());
-            Log.d("Sale " + i.toString(), arrayCambios.get(i).getSale());
-            Log.d("Minuto " + i.toString(), arrayCambios.get(i).getMinuto());
+    void initializeChronometer() {
+        myChronometer.setOnChronometerTickListener(
+                new Chronometer.OnChronometerTickListener() {
+
+                    @Override
+                    public void onChronometerTick(Chronometer chronometer) {
+                        long milliseconds = SystemClock.elapsedRealtime() - myChronometer.getBase();
+                        Integer seconds = (int) (milliseconds / 1000) % 60;
+                        Integer minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+                        if (minutes == 25 && primeraParte) {
+                            primeraParte = false;
+                            lastPause = SystemClock.elapsedRealtime();
+                            myChronometer.stop();
+                            start = true;
+
+                        }
+                        if (minutes == 50) {
+                            myChronometer.stop();
+                            fin = true;
+                            //TODO: Vaciar shared preferences
+                        }
+                        for (int i = 0; i < minutos.size(); i++) {
+                            if (minutes == minutos.get(i)) {
+                                //TODO: Coger cambios del minuto
+                                //TODO: añadirlo en el tv correspondiente
+                                //TODO: color texto negro
+                            }
+
+                            if (minutes - 5 == minutos.get(i)) {
+                                //TODO: En el tv, entra x sale y con colores parpadeando el texto
+                                // TODO: durante los 5 minutos cada segundo
+                            }
+                        }
+
+                    }
+                }
+        );
+    }
+
+    void titulares() {
+        SharedPreferences prefs =
+                getSharedPreferences("Titulares", Context.MODE_PRIVATE);
+        tv1.setText(prefs.getString("por", "error"));
+        tv2.setText(prefs.getString("dizq", "error"));
+        tv3.setText(prefs.getString("dcen", "error"));
+        tv4.setText(prefs.getString("dder", "error"));
+        tv5.setText(prefs.getString("mizq", "error"));
+        tv6.setText(prefs.getString("mder", "error"));
+        tv7.setText(prefs.getString("del", "error"));
+    }
+
+    void minuto() {
+        SharedPreferences prefs =
+                getSharedPreferences("Minutos", Context.MODE_PRIVATE);
+        for (Integer i = 0; i < prefs.getInt("minutos", 0); i++) {
+            minutos.add(Integer.parseInt(prefs.getString(i.toString(), "0")));
         }
     }
 
-    void initializeTitulares(Bundle b) {
-        tvt.setText("En el campo");
-        for (Integer i = 0; i < 7; i++) {
-            tvt.setText(tvt.getText() + "\n" + b.getString("titular"+i.toString()));
-            arrayTitulares.add(b.getString("titular"+i.toString()));
-        }
-    }
-
-    void cambiarTitular(String entra, String sale) {
-        tvt.setText("En el campo");
-        for (Integer i = 0; i < 7; i++) {
-            if (sale.equals(arrayTitulares.get(i))) {
-                arrayTitulares.set(i, entra);
-            }
-            tvt.setText(tvt.getText() + "\n" + arrayTitulares.get(i));
-
-        }
-    }
 }
